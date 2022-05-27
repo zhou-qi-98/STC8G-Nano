@@ -1,0 +1,79 @@
+C51 COMPILER V9.54   WS2812B                                                               05/25/2022 18:43:47 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE WS2812B
+OBJECT MODULE PLACED IN .\Objects\WS2812B.obj
+COMPILER INVOKED BY: D:\APPs\ARM\KEIL5\C51\BIN\C51.EXE MY\WS2812B.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\MY) DEBUG OBJECTEX
+                    -TEND PRINT(.\Listings\WS2812B.lst) TABS(2) OBJECT(.\Objects\WS2812B.obj)
+
+line level    source
+
+   1          /*-----------------------------------------------*/
+   2          /*---作者：爱学习的王大可------------------------*/
+   3          /*---文件：WS2812B.c-----------------------------*/
+   4          /*---说明：驱动幻彩5050库函数--------------------*/
+   5          /*---时间：2022年5月25日18:40--------------------*/
+   6          /*---Copyright --> 爱学习的王大可  保留所有权利--*/
+   7          /*-----------------------------------------------*/
+   8          
+   9          #include <intrins.h>
+  10          #include <WS2812B.h>
+  11          
+  12          
+  13          /*写数据1或0函数*/
+  14          void WS_Send_Data(bit dat)
+  15          {
+  16   1        if(dat)
+  17   1        {
+  18   2          WS_LED=1;
+  19   2          _nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();
+  20   2          _nop_();_nop_();_nop_();_nop_();_nop_();
+  21   2          WS_LED=0; 
+  22   2        }else
+  23   1        {
+  24   2          WS_LED=1;
+  25   2          _nop_();_nop_();_nop_();_nop_();
+  26   2          WS_LED=0;
+  27   2          _nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();
+  28   2          _nop_();_nop_();
+  29   2        }
+  30   1      }
+  31          
+  32          /*复位码*/
+  33          void WS_Reset_Code()
+  34          {
+  35   1        unsigned char i=0;
+  36   1        for (i = 0; i < 85; i++)
+  37   1        _nop_();
+  38   1      }
+  39          
+  40          
+  41          void WS_Send_Color(unsigned char R,unsigned char G,unsigned char B)
+  42          {
+  43   1        //WS_Reset_Code();
+  44   1        WS_Send_Data(G&0X80);WS_Send_Data(G&0X40);WS_Send_Data(G&0X20);WS_Send_Data(G&0X10);
+  45   1        WS_Send_Data(G&0X08);WS_Send_Data(G&0X04);WS_Send_Data(G&0X02);WS_Send_Data(G&0X01);
+  46   1        
+  47   1        WS_Send_Data(R&0X80);WS_Send_Data(R&0X40);WS_Send_Data(R&0X20);WS_Send_Data(R&0X10);
+  48   1        WS_Send_Data(R&0X08);WS_Send_Data(R&0X04);WS_Send_Data(R&0X02);WS_Send_Data(R&0X01);
+  49   1        
+  50   1        WS_Send_Data(B&0X80);WS_Send_Data(B&0X40);WS_Send_Data(B&0X20);WS_Send_Data(B&0X10);
+  51   1        WS_Send_Data(B&0X08);WS_Send_Data(B&0X04);WS_Send_Data(B&0X02);WS_Send_Data(B&0X01);
+  52   1        WS_Reset_Code();
+  53   1      }
+
+C51 COMPILER V9.54   WS2812B                                                               05/25/2022 18:43:47 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    219    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
