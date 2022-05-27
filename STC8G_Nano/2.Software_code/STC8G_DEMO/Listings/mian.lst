@@ -1,0 +1,147 @@
+C51 COMPILER V9.54   MIAN                                                                  05/26/2022 01:33:59 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MIAN
+OBJECT MODULE PLACED IN .\Objects\mian.obj
+COMPILER INVOKED BY: D:\APPs\ARM\KEIL5\C51\BIN\C51.EXE mian.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\MY) DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\mian.lst) TABS(2) OBJECT(.\Objects\mian.obj)
+
+line level    source
+
+   1          /*-----------------------------------------------*/
+   2          /*---作者：爱学习的王大可------------------------*/
+   3          /*---项目：STC8G_Nano最小系统开发板设计DEMO程序--*/
+   4          /*---芯片：STC8G1K17-----------------------------*/
+   5          /*---时间：2022年5月25日18:40--------------------*/
+   6          /*---Copyright --> 爱学习的王大可  保留所有权利--*/
+   7          /*-----------------------------------------------*/
+   8          
+   9          
+  10          /*头文件引入区域*/
+  11          #include "STC8xxxx.H"
+  12          #include "GPIO.H"
+  13          #include "oled.h"
+  14          #include "WS2812B.h"
+  15          #include "UART.H"
+  16          #include "stdio.h"
+  17          #include "bmp.h"
+  18          #include "Exti.h"
+  19          
+  20          /*管脚定义区域*/
+  21          sbit LED = P1^0;
+  22          sbit KEY1 = P3^2;
+  23          sbit KEY2 = P3^3;
+  24          
+  25          /*函数声明区域*/
+  26          void Delay10ms();
+  27          void Delay100ms();
+  28          void Time0_Init();
+  29          
+  30          
+  31          /*全局变量声明区*/
+  32          bit Timt0_flag=0;
+  33          u8 WakeUpSource;
+  34          
+  35          
+  36          /*下面开始执行主程序*/
+  37          void main(){
+  38   1          GPIO_config();  //GPIO初始化
+  39   1          P37=0;//先把5050幻彩关闭，否则上电会有绿灯
+  40   1          OLED_Init();    //OLED初始化
+  41   1          //EA = 1;         //开总中断
+  42   1          Time0_Init();
+  43   1          Exti_config();    //中断初始化
+  44   1          UART_config();  //串口1串口2初始化  
+  45   1          //OLED_ColorTurn(1);//反显
+  46   1          OLED_DisplayTurn(0);
+  47   1          OLED_Clear();
+  48   1          //OLED_ShowString(0,0,"Hello",16);
+  49   1          //OLED_ShowString(0,2,"STC8G-Nano",16);
+  50   1          OLED_DrawBMP(0,0,80,128,BMP1);
+  51   1          LED=1;
+  52   1          while(1)
+  53   1          {
+  54   2            if(Timt0_flag==1)
+C51 COMPILER V9.54   MIAN                                                                  05/26/2022 01:33:59 PAGE 2   
+
+  55   2            {
+  56   3              Timt0_flag=0;
+  57   3              //LED=~LED;
+  58   3              WS_Send_Color(1,1,1);
+  59   3              //OLED_ShowString(0,4,"STC8G-Demo",16);
+  60   3              //OLED_ShowString(0,8,"Author:ZQ",16);
+  61   3              printf("板子：STC8G-Nano\r\n");
+  62   3              printf("程序：STC8G-Demo_A0\r\n");
+  63   3              printf("作者：周琦\r\n");
+  64   3              printf("时间：22022/5/25 21:25\r\n\r\n");
+  65   3            }
+  66   2            if(WakeUpSource == 1)
+  67   2            {
+  68   3              WakeUpSource=0;
+  69   3              printf("外中断INT0唤醒\r\n");
+  70   3              LED=~LED;
+  71   3            }       
+  72   2          }
+  73   1      }
+  74          
+  75          /*定时器0初始化*/
+  76          void Time0_Init(){
+  77   1        TMOD= 0X01;
+  78   1        TL0 = 0x18;   //设置定时初始值
+  79   1        TH0 = 0xFC;   //设置定时初始值
+  80   1        TF0 = 0;    //清除TF0标志
+  81   1        EA=1;
+  82   1        ET0 =1; 
+  83   1        TR0 = 1;//定时器0开始计数
+  84   1      }
+  85          
+  86          /*定时器0中断服务函数*/
+  87          void time() interrupt 1
+  88          {
+  89   1        static int count=0;
+  90   1        TL0 = 0x18;   //设置定时初始值
+  91   1        TH0 = 0xFC;   //设置定时初始值
+  92   1        count++;
+  93   1        if(count>=1000)//12M晶振计时到达1S
+  94   1        {
+  95   2          count=0;
+  96   2          Timt0_flag=1;
+  97   2        } 
+  98   1      }
+  99          
+ 100          void Delay100ms()
+ 101          {
+ 102   1        Delay10ms();Delay10ms();
+ 103   1        Delay10ms();Delay10ms();
+ 104   1        Delay10ms();Delay10ms();
+ 105   1        Delay10ms();Delay10ms();
+ 106   1        Delay10ms();Delay10ms();
+ 107   1      }
+ 108          
+ 109          void Delay10ms()    //@12.000MHz
+ 110          {
+ 111   1        unsigned char i, j;
+ 112   1      
+ 113   1        i = 117;
+ 114   1        j = 184;
+ 115   1        do
+ 116   1        {
+C51 COMPILER V9.54   MIAN                                                                  05/26/2022 01:33:59 PAGE 3   
+
+ 117   2          while (--j);
+ 118   2        } while (--i);
+ 119   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    217    ----
+   CONSTANT SIZE    =   1378    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

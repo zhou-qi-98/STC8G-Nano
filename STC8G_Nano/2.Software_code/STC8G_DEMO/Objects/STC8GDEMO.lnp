@@ -1,0 +1,9 @@
+".\Objects\STARTUP.obj",
+".\Objects\mian.obj",
+".\Objects\GPIO.obj",
+".\Objects\oled.obj",
+".\Objects\WS2812B.obj",
+".\Objects\UART.obj",
+".\Objects\Exti.obj" 
+TO ".\Objects\STC8GDEMO" 
+PRINT(".\Listings\STC8GDEMO.m51") RAMSIZE(256) 
