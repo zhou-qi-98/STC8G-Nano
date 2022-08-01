@@ -18,6 +18,7 @@
 
 **板子设计已打样验证无误，好用记得点星星**👇
 
+![tu](http://youpai.7yunkj.com/halo/5a16aa32cfe035fd4d4df7722abe47b0.jpg)
 ![实物验证](http://youpai.7yunkj.com/halo/5a16aa32cfe035fd4d4df7722abe47b0.jpg)
 
 ##  特性
